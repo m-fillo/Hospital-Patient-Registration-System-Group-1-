@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Hospital Patient Registration System</title>
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div class="auth-card">
+
+  <!-- Banner -->
+  <div class="auth-banner">
+    <div class="logo-box">🏥</div>
+    <h1>Hospital Patient Registration System</h1>
+    <p>Freetown General Hospital, Sierra Leone</p>
+  </div>
+
+  <!-- Form -->
+  <div class="auth-body">
+    <div class="auth-title">Welcome back</div>
+    <div class="auth-sub">Sign in to access the system</div>
+
+    <!-- Alert -->
+    <div class="auth-alert" id="alert"></div>
+
+    <!-- Email -->
+    <div class="fg">
+      <label>Email Address</label>
+      <div class="input-wrap">
+        <span class="icon">✉️</span>
+        <input type="email" id="email" placeholder="admin@hprs.sl" autocomplete="email">
+      </div>
+      <span class="field-error" id="err-email">Please enter a valid email.</span>
+    </div>
+
+    <!-- Password -->
+    <div class="fg">
+      <label>Password</label>
+      <div class="input-wrap">
+        <span class="icon">🔒</span>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <span class="field-error" id="err-password">Password is required.</span>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn-auth" id="login-btn" onclick="doLogin()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btn-text">Sign In</span>
+    </button>
+
+    <!-- Demo hint -->
+    <div class="divider">Demo credentials</div>
+    <div style="background:#f8f9fa;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#555;line-height:1.8">
+    </div>
+
+    <div class="auth-footer" style="margin-top:18px">
+      Don't have an account? <a href="register.html">Create one here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function doLogin() {
+  var email    = document.getElementById('email').value.trim();
+  var password = document.getElementById('password').value.trim();
+  var alert    = document.getElementById('alert');
+  var spinner  = document.getElementById('spinner');
+  var btnText  = document.getElementById('btn-text');
+  var btn      = document.getElementById('login-btn');
+
+  // Clear errors
+  document.getElementById('err-email').classList.remove('show');
+  document.getElementById('err-password').classList.remove('show');
+  alert.classList.remove('show');
+
+  var valid = true;
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    document.getElementById('err-email').classList.add('show');
+    document.getElementById('email').classList.add('error');
+    valid = false;
+  }
+  if (!password) {
+    document.getElementById('err-password').classList.add('show');
+    document.getElementById('password').classList.add('error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  // Show loading
+  spinner.classList.add('show');
+  btnText.textContent = 'Signing in...';
+  btn.disabled = true;
+
+  var form = new FormData();
+  form.append('email',    email);
+  form.append('password', password);
+
+  fetch('php/login.php', { method: 'POST', body: form })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      spinner.classList.remove('show');
+      btn.disabled = false;
+      btnText.textContent = 'Sign In';
+
+      if (data.success) {
+        alert.className = 'auth-alert success show';
+        alert.innerHTML = '✔ Login successful! Redirecting...';
+        setTimeout(function() { window.location.href = 'index.html'; }, 1000);
+      } else {
+        alert.className = 'auth-alert error show';
+        alert.innerHTML = '✖ ' + data.message;
+      }
+    })
+    .catch(function() {
+      spinner.classList.remove('show');
+      btn.disabled = false;
+      btnText.textContent = 'Sign In';
+      alert.className = 'auth-alert error show';
+      alert.innerHTML = '✖ Server error. Make sure XAMPP is running.';
+    });
+}
+
+// Allow pressing Enter to submit
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+</script>
+</body>
+</html>

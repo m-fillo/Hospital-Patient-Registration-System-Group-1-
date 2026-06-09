@@ -1,0 +1,210 @@
+/* ============================================================
+   auth.css — Login & Register page styles
+   Hospital Patient Registration System
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f2540 0%, #1a3a5c 50%, #1a6644 100%);
+  padding: 20px;
+}
+
+/* ── CARD ── */
+.auth-card {
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+
+/* ── CARD TOP BANNER ── */
+.auth-banner {
+  background: linear-gradient(135deg, #1a3a5c, #1a6644);
+  padding: 32px 36px 28px;
+  text-align: center;
+  color: #fff;
+}
+.auth-banner .logo-box {
+  width: 60px; height: 60px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+  margin: 0 auto 14px;
+  border: 2px solid rgba(255,255,255,0.25);
+}
+.auth-banner h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+}
+.auth-banner p {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ── FORM BODY ── */
+.auth-body { padding: 30px 36px 36px; }
+
+.auth-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a3a5c;
+  margin-bottom: 4px;
+}
+.auth-sub {
+  font-size: 13px;
+  color: #7f8c8d;
+  margin-bottom: 24px;
+}
+
+/* ── FORM GROUP ── */
+.fg {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+.fg label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.fg .input-wrap {
+  position: relative;
+}
+.fg .input-wrap .icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #aaa;
+  pointer-events: none;
+}
+.fg input,
+.fg select {
+  width: 100%;
+  padding: 11px 13px 11px 38px;
+  border: 1.5px solid #dce1e7;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  background: #fff;
+}
+.fg input:focus,
+.fg select:focus {
+  border-color: #1a6644;
+  box-shadow: 0 0 0 3px rgba(26,102,68,0.12);
+}
+.fg input.error { border-color: #e74c3c; }
+.fg .field-error {
+  font-size: 11.5px;
+  color: #e74c3c;
+  margin-top: 2px;
+  display: none;
+}
+.fg .field-error.show { display: block; }
+
+/* row of two columns */
+.fg-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ── SUBMIT BUTTON ── */
+.btn-auth {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #1a3a5c, #1a6644);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-auth:hover   { opacity: 0.9; transform: translateY(-1px); }
+.btn-auth:active  { transform: translateY(0); }
+.btn-auth:disabled{ opacity: 0.6; cursor: not-allowed; }
+
+/* ── ALERTS ── */
+.auth-alert {
+  border-radius: 10px;
+  padding: 11px 15px;
+  font-size: 13px;
+  display: none;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 16px;
+}
+.auth-alert.show   { display: flex; }
+.auth-alert.success{ background: #eafaf1; color: #1e8449; border: 1px solid #a9dfbf; }
+.auth-alert.error  { background: #fdedec; color: #922b21; border: 1px solid #f5b7b1; }
+
+/* ── FOOTER LINK ── */
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #7f8c8d;
+}
+.auth-footer a {
+  color: #1a6644;
+  font-weight: 600;
+  text-decoration: none;
+}
+.auth-footer a:hover { text-decoration: underline; }
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  color: #bbb;
+  font-size: 12px;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e8e8e8;
+}
+
+/* ── SPINNER ── */
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.spinner.show { display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }

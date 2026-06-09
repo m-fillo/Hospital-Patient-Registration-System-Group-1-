@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — Hospital Patient Registration System</title>
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<div class="auth-card" style="max-width:500px">
+
+  <!-- Banner -->
+  <div class="auth-banner">
+    <div class="logo-box">🏥</div>
+    <h1>Hospital Patient Registration System</h1>
+    <p>Freetown General Hospital, Sierra Leone</p>
+  </div>
+
+  <!-- Form -->
+  <div class="auth-body">
+    <div class="auth-title">Create Account</div>
+    <div class="auth-sub">Register a new staff account</div>
+
+    <!-- Alert -->
+    <div class="auth-alert" id="alert"></div>
+
+    <!-- Full Name -->
+    <div class="fg">
+      <label>Full Name *</label>
+      <div class="input-wrap">
+        <span class="icon">👤</span>
+        <input type="text" id="full_name" placeholder="e.g. Aminata Koroma">
+      </div>
+      <span class="field-error" id="err-name">Full name is required.</span>
+    </div>
+
+    <!-- Email -->
+    <div class="fg">
+      <label>Email Address *</label>
+      <div class="input-wrap">
+        <span class="icon">✉️</span>
+        <input type="email" id="email" placeholder="e.g. aminata@hprs.sl">
+      </div>
+      <span class="field-error" id="err-email">Please enter a valid email.</span>
+    </div>
+
+    <!-- Role -->
+    <div class="fg">
+      <label>Role *</label>
+      <div class="input-wrap">
+        <span class="icon">🏷️</span>
+        <select id="role">
+          <option value="receptionist">Receptionist</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Password row -->
+    <div class="fg-row">
+      <div class="fg" style="margin-bottom:0">
+        <label>Password *</label>
+        <div class="input-wrap">
+          <span class="icon">🔒</span>
+          <input type="password" id="password" placeholder="Min 6 chars">
+        </div>
+        <span class="field-error" id="err-password">Min 6 characters.</span>
+      </div>
+      <div class="fg" style="margin-bottom:0">
+        <label>Confirm Password *</label>
+        <div class="input-wrap">
+          <span class="icon">🔒</span>
+          <input type="password" id="confirm" placeholder="Repeat password">
+        </div>
+        <span class="field-error" id="err-confirm">Passwords don't match.</span>
+      </div>
+    </div>
+    <div style="margin-bottom:16px"></div>
+
+    <!-- Submit -->
+    <button class="btn-auth" id="reg-btn" onclick="doRegister()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btn-text">Create Account</span>
+    </button>
+
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Sign in here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function doRegister() {
+  var full_name = document.getElementById('full_name').value.trim();
+  var email     = document.getElementById('email').value.trim();
+  var role      = document.getElementById('role').value;
+  var password  = document.getElementById('password').value;
+  var confirm   = document.getElementById('confirm').value;
+  var alertEl   = document.getElementById('alert');
+  var spinner   = document.getElementById('spinner');
+  var btnText   = document.getElementById('btn-text');
+  var btn       = document.getElementById('reg-btn');
+
+  // Clear errors
+  ['err-name','err-email','err-password','err-confirm'].forEach(function(id) {
+    document.getElementById(id).classList.remove('show');
+  });
+  alertEl.classList.remove('show');
+
+  var valid = true;
+  if (!full_name) { document.getElementById('err-name').classList.add('show'); valid = false; }
+  if (!email || !/\S+@\S+\.\S+/.test(email)) { document.getElementById('err-email').classList.add('show'); valid = false; }
+  if (password.length < 6) { document.getElementById('err-password').classList.add('show'); valid = false; }
+  if (password !== confirm) { document.getElementById('err-confirm').classList.add('show'); valid = false; }
+  if (!valid) return;
+
+  spinner.classList.add('show');
+  btnText.textContent = 'Creating account...';
+  btn.disabled = true;
+
+  var form = new FormData();
+  form.append('full_name',        full_name);
+  form.append('email',            email);
+  form.append('password',         password);
+  form.append('confirm_password', confirm);
+  form.append('role',             role);
+
+  fetch('php/register.php', { method: 'POST', body: form })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      spinner.classList.remove('show');
+      btn.disabled = false;
+      btnText.textContent = 'Create Account';
+
+      if (data.success) {
+        alertEl.className = 'auth-alert success show';
+        alertEl.innerHTML = '✔ ' + data.message + ' Redirecting to login...';
+        setTimeout(function() { window.location.href = 'login.html'; }, 2000);
+      } else {
+        alertEl.className = 'auth-alert error show';
+        alertEl.innerHTML = '✖ ' + data.message;
+      }
+    })
+    .catch(function() {
+      spinner.classList.remove('show');
+      btn.disabled = false;
+      btnText.textContent = 'Create Account';
+      alertEl.className = 'auth-alert error show';
+      alertEl.innerHTML = '✖ Server error. Make sure XAMPP is running.';
+    });
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doRegister();
+});
+</script>
+</body>
+</html>
